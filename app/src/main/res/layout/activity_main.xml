@@ -24,6 +24,12 @@
         android:gravity="start|top"
         android:inputType="textMultiLine"/>
 
+    <EditText
+        android:id="@+id/txtNomeArquivo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite o nome do arquivo para abrir"/>
+
     <Button
         android:id="@+id/btLimpar"
         android:layout_width="match_parent"

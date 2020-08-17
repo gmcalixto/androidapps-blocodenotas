@@ -27,13 +27,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //obtendo caminho de gravação do arquivos
-        this.fileName = getApplicationContext().getFilesDir().getPath().toString() + "/fiap.txt";
+        this.fileName = getApplicationContext().getFilesDir().getPath() + "/";
 
         //chamada dos elementos de tela em objetos
         final EditText contentBox = findViewById(R.id.contextBox);
-        Button btLimpar = findViewById(R.id.btLimpar);
-        Button btSalvar = findViewById(R.id.btSalvar);
-        Button btRecuperar = findViewById(R.id.btRecuperar);
+        final EditText fileNameToOpen = findViewById(R.id.txtNomeArquivo);
+        final Button btLimpar = findViewById(R.id.btLimpar);
+        final Button btSalvar = findViewById(R.id.btSalvar);
+        final Button btRecuperar = findViewById(R.id.btRecuperar);
 
         //listeners de tocar no botão para disparar eventos
         btLimpar.setOnClickListener(new View.OnClickListener() {
@@ -46,8 +47,16 @@ public class MainActivity extends AppCompatActivity {
         btSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String content = contentBox.getText().toString();
-                MainActivity.this.gravaDadosArquivo(fileName,content);
+                if(fileNameToOpen.getText().length() == 0){
+                    Toast.makeText(MainActivity.this, "Nome de arquivo vazio", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    String completeFN  = fileName + fileNameToOpen.getText().toString();
+                    String content = contentBox.getText().toString();
+                    MainActivity.this.gravaDadosArquivo(completeFN,content);
+                }
+
+
 
             }
         });
@@ -55,8 +64,14 @@ public class MainActivity extends AppCompatActivity {
         btRecuperar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String content = recuperaDadosArquivo(fileName);
-                contentBox.setText(content);
+                if(fileNameToOpen.getText().length() == 0){
+                    Toast.makeText(MainActivity.this, "Nome de arquivo vazio", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    String completeFN  = fileName + fileNameToOpen.getText().toString();
+                    String content = recuperaDadosArquivo(completeFN);
+                    contentBox.setText(content);
+                }
             }
         });
 
@@ -68,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             OutputStreamWriter bufferSaida = new OutputStreamWriter(new FileOutputStream(fileName),"UTF-8");
             bufferSaida.write(data);
             bufferSaida.close();
+            Toast.makeText(this, "Salvo!", Toast.LENGTH_SHORT).show();
         }
         catch(FileNotFoundException e){
             Toast.makeText(this, "Falha na abertura do arquivo", Toast.LENGTH_SHORT).show();
@@ -93,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 linha = bufferedReader.readLine();
             }
 
+            Toast.makeText(this, "Recuperado!", Toast.LENGTH_SHORT).show();
             return sb.toString();
 
         }
